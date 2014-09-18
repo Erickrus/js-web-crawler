@@ -1,8 +1,10 @@
+//amCharset, for digits translation
 var charsets = new Array(
   "K","0", "C","1", "P","2", "*","3",
   "~","4", "$","5", "6","6", "%","7",
   "#","8", ":","9");
 
+//translate csv content to digits
 function amTranslate(ch) {
   for (var i=0;i<charsets.length/2;i++) {
     if (ch == charsets[i*2]) {
@@ -12,13 +14,17 @@ function amTranslate(ch) {
   return "";
 }
 
+//translate whole lines of csv file to readable format
 function amConvert(sLines, mask) {
   var lines = sLines.split("\n");
   var result = "";
+  
+  //for each line do following stuffs
   for (var i=0;i<lines.length;i++) {
   	 var line = lines[i];
   	 if (line != "") {
   	 for (var j=0;j<line.length;j++) {
+     //translate based on the mask
      if (j<mask.length) {
            if (mask.charAt(j) == 'D' ||
   	        mask.charAt(j) == 'Y' ||
@@ -32,6 +38,7 @@ function amConvert(sLines, mask) {
   	    } else {
   	       result += line.charAt(j);
   	    }
+     //translate directly
      } else {
   	       var n = amTranslate(line.charAt(j));
   	     if (n=="") result+= line.charAt(j);
@@ -44,6 +51,7 @@ function amConvert(sLines, mask) {
   return result;
 }
 
+//available currency codes
 amType= new Array(
   "ALUMINUM","BRL","CAD","CHF","CNY","COPPER","DJIA","EUR","GBP","GOLD4USD",
   "GOLDB1M","GOLDB1Y","GOLDB6M","HKD","HUI","INR","JPY","JSEGOLD","KDX","KGX",
@@ -56,10 +64,12 @@ amType= new Array(
   "SILVERB1Y","SILVERB6M","SP500","TSX","USDX","XAU","ZAR","ZINC"
 );
 
+//format the url for retrieving the charts data
 function amFormatUrl(sAmType){
 	return "http://charts.kitco.com/KitcoCharts/RequestHandler?requestName=getSymbolHistoricalLiveChart&Symbol="+sAmType;
 }
 
+//generate an upsert statements for mysql
 function amFormatSql(line, curr_code){
    var cells = line.split(",");
    var ts= cells[0];
