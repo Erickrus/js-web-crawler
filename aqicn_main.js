@@ -3,14 +3,11 @@ var mysql   = require('mysql');
 var crawler = require("./basic-crawler");
 var util    = require("./util");
 var aqicn   = require("./aqicn");
+var config  = require("./config");
 
-var conn = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'secret',
-    database:'chinaaqi',
-    port: 3306
-});
+config.loadConfig();
+
+var conn = mysql.createConnection(mysqlConf);
 
 function processQuery(conn, sql) {
    conn.query(sql, function(err, rows, fields) {
@@ -40,8 +37,6 @@ function crawl() {
       );
 }
 
-proxy         = "172.31.1.246";
-proxy_port    = "8080";
-proxy_enabled = true;
-
+crawl();
 t=setInterval(crawl, 15*60*1000);
+

@@ -8,21 +8,22 @@ function aqiFormatSql(dataItem) {
        if(utime2.length==4) utime2 = "0"+utime2;
        utime += utime2;
           
-   var sql="INSERT INTO aqicn.TBL_AQI_CN(CITY_NAME, PRCSS_TIME, AQI_VALUE, X_VALUE, Longitude, Latitude, UPDATE_TS)"+
-           "VALUES('"+dataItem.city+"', STR_TO_DATE('"+utime+"','%Y%m%d%H:%i'), "+dataItem.aqi+", "+dataItem.x+", "+dataItem.g[1]+", "+dataItem.g[0]+", CURRENT_TIMESTAMP)"+
+   var sql="INSERT INTO aqicn.TBL_AQI_CN(CITY_NAME, PRCSS_TIME, AQI_VALUE, X_VALUE, Longitude, Latitude, POL_TYPE, UPDATE_TS)"+
+           "VALUES('"+dataItem.city+"', STR_TO_DATE('"+utime+"','%Y%m%d%H:%i'), "+dataItem.aqi+", "+dataItem.x+", "+dataItem.lon+", "+dataItem.lat+", '"+dataItem.pol+"', CURRENT_TIMESTAMP)"+
            " ON DUPLICATE KEY UPDATE AQI_VALUE = "+dataItem.aqi+", UPDATE_TS = CURRENT_TIMESTAMP;";
    return sql;
 }
 
 function aqiGetJson(data) {
-   var jsfile = data.substring(data.indexOf("mapInitWithData(")+16);
-     	 jsfile=jsfile.substring(0,jsfile.length-27)
+   var jsfile = data.substring(data.indexOf("mapShowLevel2Makers(")+20);
+     	 jsfile=jsfile.substring(0,jsfile.length-4);
    var jsArray = eval(jsfile);
    return jsArray;
 }
 
 function aqiFormatUrl(){
-	return "http://aqicn.org/map/";
+	return "http://waqi.aqicn.org/mapi/?lurlv2&z=5&jsoncallback=mapShowLevel2Makers&bounds=((3.1,%2073.13650431249994),%20(54.1,%20136.49490274999994))&dyn";
+	//return "http://aqicn.org/map/";
 }
 
 exports.aqiFormatSql = aqiFormatSql;

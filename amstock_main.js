@@ -3,8 +3,9 @@ var mysql   = require('mysql');
 var amstock = require("./amstock");
 var crawler = require("./basic-crawler");
 var util    = require("./util");
+var config  = require("./config");
 
-
+config.loadConfig();
 
 function processQuery(conn, sql) {
    conn.query(sql, function(err, rows, fields) {
@@ -35,13 +36,7 @@ function processData(data) {
      }
 }
 
-var conn = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'secret',
-    database:'kitco',
-    port: 3306
-});
+
 
 var mainCode = new Array(
    "BRL", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", "INR", "JPY",
@@ -62,11 +57,8 @@ function crawl() {
       );
    }
 }
-proxy_enabled = true;
-proxy         = "172.31.1.246";
-proxy_port    = "8080";
 
-
+var conn = mysql.createConnection(mysqlConf);
 conn.connect();
 
 //every 10 minutes execute all the crawl codes
