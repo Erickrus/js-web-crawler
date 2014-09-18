@@ -10,6 +10,12 @@ function saveToFile(filename, s) {
   });
 }
 
+function saveToBinaryFile(filename, s) {
+	var wstream = fs.createWriteStream(filename);
+	wstream.write(s);
+	wstream.end();
+}
+
 function formatDatetime(d) {
    var yyyy = d.getFullYear().toString();
    var mm = (d.getMonth()+1).toString(); // getMonth() is zero-based
@@ -24,6 +30,19 @@ function formatDatetime(d) {
    ; // padding
 }
 
+function copyFile(src, dst){
+    var is = fs.createReadStream(src);
+    var os = fs.createWriteStream(dst);
+    is.pipe(os);
+}
+
+function executeProcess(cmd) {
+    require("child_process").exec(cmd).unref();
+}
+
 
 exports.saveToFile = saveToFile;
 exports.formatDatetime = formatDatetime;
+exports.saveToBinaryFile = saveToBinaryFile;
+exports.copyFile = copyFile;
+exports.executeProcess = executeProcess;
