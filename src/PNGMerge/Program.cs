@@ -23,11 +23,16 @@ namespace PNGMerge
             {
                 for (int j = 0; j < 7; j++)
                 {
-                    int x = 1648+i;
-                    int y = 441+j;
-                    Bitmap p1 = new Bitmap("data\\"+timestamp+"_" + x + "_" + y + ".png");
-                    p1.MakeTransparent();
-                    g.DrawImage(p1, new Point(i*256, (6-j)*256));
+                    try
+                    {
+                        int x = 1648 + i;
+                        int y = 441 + j;
+                        Bitmap p1 = new Bitmap("data\\" + timestamp + "_" + x + "_" + y + ".png");
+                        p1.MakeTransparent();
+                        g.DrawImage(p1, new Point(i * 256, (6 - j) * 256));
+                    }
+                    catch (Exception e)
+                    { }
                 }
             }
                 

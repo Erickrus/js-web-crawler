@@ -57,6 +57,8 @@ SELECT COUNT(1) FROM aqicn.TBL_AQI_CN
 SELECT * FROM aqicn.TBL_AQI_CN
 WHERE lower(city_name) like '%shanghai%';
 
+
+
 SELECT * FROM aqicn.TBL_AQI_CN
 WHERE city_name ='Beijing (北京)' ;
 
