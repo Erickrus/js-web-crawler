@@ -6,6 +6,7 @@ function getCaptDatetime(dataItem) {
        
    var captTimestamp= dataItem.utime.substring(dataItem.utime.indexOf(" ")+1);
    if (captTimestamp.length==4) {
+   	  //zeroleading
    	  captTimestamp = "0"+captTimestamp;
    }
 
@@ -30,9 +31,9 @@ function getCaptDatetime(dataItem) {
 
 function aqiFormatSql(dataItem) {
 	
-   var capDatetime = getCaptDatetime(dataItem);
+   var captDatetime = getCaptDatetime(dataItem);
    var sql="INSERT INTO aqicn.TBL_AQI_CN(CITY_NAME, PRCSS_TIME, AQI_VALUE, X_VALUE, Longitude, Latitude, POL_TYPE, UPDATE_TS)"+
-           "VALUES('"+dataItem.city+"', STR_TO_DATE('"+capDatetime+"','%Y%m%d%H:%i'), "+dataItem.aqi+", "+dataItem.x+", "+dataItem.lon+", "+dataItem.lat+", '"+dataItem.pol+"', CURRENT_TIMESTAMP)"+
+           "VALUES('"+dataItem.city+"', STR_TO_DATE('"+captDatetime+"','%Y%m%d%H:%i'), "+dataItem.aqi+", "+dataItem.x+", "+dataItem.lon+", "+dataItem.lat+", '"+dataItem.pol+"', CURRENT_TIMESTAMP)"+
            " ON DUPLICATE KEY UPDATE AQI_VALUE = "+dataItem.aqi+", UPDATE_TS = CURRENT_TIMESTAMP;";
    return sql;
 }
