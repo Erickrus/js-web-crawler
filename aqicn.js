@@ -1,15 +1,38 @@
 var util    = require("./util");
 
+function getCaptDatetime(dataItem) {
+   var currDate=util.formatDatetime(new Date());
+   currDate = currDate.substring(0,8);
+       
+   var captTimestamp= dataItem.utime.substring(dataItem.utime.indexOf(" ")+1);
+   if (captTimestamp.length==4) {
+   	  captTimestamp = "0"+captTimestamp;
+   }
+
+       
+   var d = new Date();
+   var hh=d.getHours().toString();
+   var mi=d.getMinutes().toString();
+   var currTimestamp = (hh[1]?hh:"0"+hh[0]) + ":"+  (mi[1]?mi:"0"+mi[0]);
+   
+   d.setDate(d.getDate() - 1);
+   var prevDate = util.formatDatetime(d);
+       prevDate = prevDate.substring(0,8);
+   
+   var currDateTime = currDate + captTimestamp;
+   
+   if (currTimestamp<captTimestamp) {
+      currDateTime = prevDate + captTimestamp;
+   }
+   return currDateTime;
+   
+}
+
 function aqiFormatSql(dataItem) {
 	
-   var utime=util.formatDatetime(new Date());
-       utime = utime.substring(0,8);
-   var utime2= dataItem.utime.substring(dataItem.utime.indexOf(" ")+1);
-       if(utime2.length==4) utime2 = "0"+utime2;
-       utime += utime2;
-          
+   var capDatetime = getCaptDatetime(dataItem);
    var sql="INSERT INTO aqicn.TBL_AQI_CN(CITY_NAME, PRCSS_TIME, AQI_VALUE, X_VALUE, Longitude, Latitude, POL_TYPE, UPDATE_TS)"+
-           "VALUES('"+dataItem.city+"', STR_TO_DATE('"+utime+"','%Y%m%d%H:%i'), "+dataItem.aqi+", "+dataItem.x+", "+dataItem.lon+", "+dataItem.lat+", '"+dataItem.pol+"', CURRENT_TIMESTAMP)"+
+           "VALUES('"+dataItem.city+"', STR_TO_DATE('"+capDatetime+"','%Y%m%d%H:%i'), "+dataItem.aqi+", "+dataItem.x+", "+dataItem.lon+", "+dataItem.lat+", '"+dataItem.pol+"', CURRENT_TIMESTAMP)"+
            " ON DUPLICATE KEY UPDATE AQI_VALUE = "+dataItem.aqi+", UPDATE_TS = CURRENT_TIMESTAMP;";
    return sql;
 }
